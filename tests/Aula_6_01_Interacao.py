@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import time
+
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
 driver.get("https://demoqa.com/text-box")
@@ -14,15 +15,15 @@ elemento_current_address = driver.find_element(By.ID, "currentAddress").send_key
 
 btn_submit = driver.find_element(By.ID, "submit").click()
 
-resltado = driver.find_element(By.ID, "output").text    
+resultado = driver.find_element(By.ID, "output").text    
 
-assert "Teste Selenium" in resltado
+assert "Teste Selenium" in resultado
 print("Teste passou com Sucesso!")
 
-assert "teste@selenium.com" in resltado
+assert "teste@selenium.com" in resultado
 print("Teste passou com Sucesso!")
 
-assert "Rua Teste, 123" in resltado
+assert "Rua Teste, 123" in resultado
 print("Teste passou com Sucesso!")  
 
 driver.quit()
