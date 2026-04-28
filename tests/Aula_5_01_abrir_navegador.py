@@ -15,7 +15,4 @@ driver.maximize_window()
 #Fecha o navegador
 driver.quit()
 
-#Teste
-
-
 
