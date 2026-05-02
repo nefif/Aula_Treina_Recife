@@ -25,6 +25,7 @@ def step_acessar_formulario(context):
     Aqui apenas navegamos até a página.
     """
     context.page.open_page()
+    context.driver.execute_script("document.body.style.zoom='65%'")
 
 
 @when("eu preencher todos os campos do formulário")
