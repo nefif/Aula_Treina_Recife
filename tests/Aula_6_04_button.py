@@ -18,8 +18,8 @@ actions = ActionChains(driver)
 # --- Execução das Ações ---
 
 # Double Click
-double_btn = driver.find_element(By.ID, "doubleClickBtn")
-actions.double_click(double_btn).perform()
+element_double_btn = driver.find_element(By.ID, "doubleClickBtn")
+actions.double_click(element_double_btn).perform()
 
 # Right Click
 right_btn = driver.find_element(By.ID, "rightClickBtn")

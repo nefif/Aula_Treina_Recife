@@ -11,6 +11,9 @@ driver = webdriver.Chrome()
 driver.maximize_window()
 driver.get("https://demoqa.com/automation-practice-form")
 
+driver.execute_script("document.body.style.zoom='50%'")
+
+
 first_name=driver.find_element(By.ID, "firstName").send_keys("João")
 
 last_name=driver.find_element(By.ID, "lastName").send_keys("Silva")

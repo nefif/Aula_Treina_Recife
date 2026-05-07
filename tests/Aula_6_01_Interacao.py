@@ -9,7 +9,10 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.get("https://demoqa.com/text-box")
 driver.maximize_window()
 
-elemento_full_name = driver.find_element(By.ID, "userName").send_keys("Teste Selenium")
+#ajuste por causa da tela
+driver.execute_script("document.body.style.zoom='80%'")
+
+elemento_full_name = driver.find_element(By.ID,"userName").send_keys("Teste Selenium")
 elemento_email = driver.find_element(By.ID, "userEmail").send_keys("teste@selenium.com")
 elemento_current_address = driver.find_element(By.ID, "currentAddress").send_keys("Rua Teste, 123")
 

@@ -15,10 +15,12 @@ time.sleep(2)
 abas = driver.window_handles
 driver.switch_to.window(abas[1])
 
-time.sleep(2)
+time.sleep(1)
 
 # Validação simples
 assert "https://demoqa.com/" == driver.current_url
 print("Sucesso: Link validado!")
+
+time.sleep(1)
 
 driver.quit()
