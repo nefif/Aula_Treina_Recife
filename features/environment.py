@@ -1,90 +1,39 @@
 import os
-import re
-from datetime import datetime
-from pathlib import Path
-
 from selenium import webdriver
-
 from pages.practice_form_page import PracticeFormPage
-
-
-# Diretórios base
-ROOT_DIR = Path.cwd()
-SCREENSHOTS_DIR = ROOT_DIR / "screenshots_behave"
-
-
-def _slugify(text: str) -> str:
-    """
-    Converte texto para formato seguro para nome de arquivo.
-    Ex: "Fluxo Completo" -> "Fluxo_Completo"
-    """
-    text = text.strip()
-    text = re.sub(r"[^a-zA-Z0-9_-]+", "_", text)
-    return text.strip("_")
-
 
 def before_all(context):
     """
-    Executa antes de toda a suíte.
-    Cria pasta de screenshots.
+    Executa uma única vez antes de todos os testes começarem.
+    Vamos garantir que a pasta 'evidencias' exista.
     """
-    SCREENSHOTS_DIR.mkdir(exist_ok=True)
-
+    if not os.path.exists("evidencias"):
+        os.makedirs("evidencias")
 
 def before_scenario(context, scenario):
     """
-    Executa antes de cada cenário.
-    Inicializa o driver e o Page Object.
+    Executa antes de cada cenário (teste).
     """
-    options = webdriver.ChromeOptions()
-    options.add_argument("--start-maximized")
-
-    context.driver = webdriver.Chrome(options=options)
+    context.driver = webdriver.Chrome()
+    context.driver.maximize_window()
     context.page = PracticeFormPage(context.driver)
-
-    # Guardar nomes organizados
-    feature_name = getattr(getattr(scenario, "feature", None), "name", "feature")
-    context.feature_name = _slugify(feature_name)
-    context.scenario_name = _slugify(scenario.name)
-
 
 def after_step(context, step):
     """
-    Executa após CADA step (independente de sucesso ou falha).
-
-    👉 Aqui salvamos screenshot de TODOS os steps
+    Executa após CADA passo (step) do seu arquivo .feature.
     """
-
-    if not hasattr(context, "driver") or not context.driver:
-        return
-
-    # Status do step (passed, failed, skipped)
-    status = getattr(step.status, "name", str(step.status)).lower()
-
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-    # Estrutura de pastas:
-    # screenshots_behave/feature/scenario/
-    feature_dir = SCREENSHOTS_DIR / context.feature_name
-    scenario_dir = feature_dir / context.scenario_name
-    scenario_dir.mkdir(parents=True, exist_ok=True)
-
-    # Nome do arquivo inclui status
-    step_name = _slugify(step.name)
-    filename = f"{step_name}_{status}_{timestamp}.png"
-
-    filepath = scenario_dir / filename
-
-    # Salva screenshot
-    context.driver.save_screenshot(str(filepath))
-
-    print(f"[SCREENSHOT] {status.upper()} - {filepath}")
-
+    # 1. Trocamos os espaços em branco do nome do passo por sublinhados (_)
+    # Ex: "Quando eu enviar o formulário" vira "Quando_eu_enviar_o_formulário"
+    nome_seguro = step.name.replace(" ", "_")
+    
+    # 2. Montamos o caminho de onde a foto será salva
+    caminho_foto = f"evidencias/{nome_seguro}.png"
+    
+    # 3. Pedimos para o Selenium "tirar a foto" da tela atual
+    context.driver.save_screenshot(caminho_foto)
 
 def after_scenario(context, scenario):
     """
-    Executa após cada cenário.
-    Fecha o navegador.
+    Executa após cada cenário, fechando o navegador.
     """
-    if hasattr(context, "driver") and context.driver:
-        context.driver.quit()
+    context.driver.quit()
